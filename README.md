@@ -145,3 +145,7 @@ site/             static dashboard, deployed to GitHub Pages
 - [MITRE ATT&CK](https://attack.mitre.org/) v20.1 STIX data, and [pySigma](https://github.com/SigmaHQ/pySigma) with its Splunk, Elasticsearch and Kusto backends.
 
 Code and rules are MIT licensed.
+
+---
+
+<sub>One of eleven projects by [Alok Kulkarni](https://alok.is-a.dev): [Hearth](https://github.com/alok-kul5/hearth-iot) home sensors · [Headway](https://github.com/alok-kul5/headway-transit) transit data · [Vigil](https://github.com/alok-kul5/vigil-soc) security triage · [Loupe](https://github.com/alok-kul5/loupe-vision) defect inspection · [Kharcha](https://github.com/alok-kul5/kharcha-finance) personal finance · [Stockroom](https://github.com/alok-kul5/stockroom-inventory) inventory · [Quietwire](https://github.com/alok-kul5/quietwire-villa) smart home design · [Canopy](https://alok.is-a.dev/canopy/) coffee storefront · **Picket** detection rules · [Warden](https://github.com/alok-kul5/warden-iac) cloud IaC scanning · [Marquee](https://github.com/alok-kul5/marquee-recs) recommendations.</sub>
