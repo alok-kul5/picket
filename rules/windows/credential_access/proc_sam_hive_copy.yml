@@ -1,0 +1,45 @@
+title: Registry Hive Copy for Offline Credential Extraction
+id: ceddfff0-d87f-5b16-9c3e-f09cdbc0f0ec
+status: test
+description: Detects the SAM, SYSTEM or SECURITY hives being saved with reg.exe or copied from a volume shadow copy with esentutl, the usual first step before extracting local hashes and LSA secrets offline.
+references:
+  - https://attack.mitre.org/techniques/T1003/002/
+  - https://lolbas-project.github.io/lolbas/Binaries/Esentutl/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.credential-access
+  - attack.t1003.002
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_reg_img:
+    Image|endswith: '\reg.exe'
+  selection_reg_verb:
+    CommandLine|contains:
+      - ' save '
+      - ' export '
+  selection_reg_hive:
+    CommandLine|contains:
+      - 'hklm\sam'
+      - 'hkey_local_machine\sam'
+      - 'hklm\security'
+      - 'hkey_local_machine\security'
+      - 'hklm\system '
+      - 'hkey_local_machine\system '
+  selection_esent_img:
+    Image|endswith: '\esentutl.exe'
+  selection_esent_target:
+    CommandLine|contains:
+      - '\config\SAM'
+      - '/config/SAM'
+      - '\config\SECURITY'
+      - '/config/SECURITY'
+      - '\config\SYSTEM'
+      - '/config/SYSTEM'
+      - 'ntds.dit'
+  condition: (selection_reg_img and selection_reg_verb and selection_reg_hive) or (selection_esent_img and selection_esent_target)
+falsepositives:
+  - Backup scripts that export hives. They should run from a known service account on a schedule.
+level: high

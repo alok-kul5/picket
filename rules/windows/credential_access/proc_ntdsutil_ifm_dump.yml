@@ -1,0 +1,26 @@
+title: NTDS.dit Copy via ntdsutil Install From Media
+id: 219fafc3-d3c7-5364-ac99-d45c249131a9
+status: test
+description: Detects ntdsutil creating an Install From Media (IFM) snapshot, which writes a copy of NTDS.dit and the SYSTEM hive that can be cracked offline for every domain hash.
+references:
+  - https://attack.mitre.org/techniques/T1003/003/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.credential-access
+  - attack.t1003.003
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith: '\ntdsutil.exe'
+    - OriginalFileName: 'ntdsutil.exe'
+  selection_cli:
+    CommandLine|contains|all:
+      - 'ifm'
+      - 'create'
+  condition: all of selection_*
+falsepositives:
+  - Domain admins staging a new domain controller with IFM media. Confirm with a change ticket.
+level: high

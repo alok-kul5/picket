@@ -1,0 +1,33 @@
+title: DCSync Directory Replication Request by a User Account
+id: 494fc7d1-64e7-5cd1-8c74-f9deb559f354
+status: test
+description: Detects a user account (not a domain controller machine account) using the Replicating Directory Changes extended rights on the domain object, which is how DCSync tools such as Mimikatz pull password hashes from a DC.
+references:
+  - https://attack.mitre.org/techniques/T1003/006/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.credential-access
+  - attack.t1003.006
+logsource:
+  product: windows
+  service: security
+  definition: 'Requires "Audit Directory Service Access" on domain controllers with an auditing SACL on the domain object.'
+detection:
+  selection:
+    EventID: 4662
+    AccessMask: '0x100'
+    Properties|contains:
+      - '1131f6aa-9c07-11d1-f79f-00c04fc2dcd2'
+      - '1131f6ad-9c07-11d1-f79f-00c04fc2dcd2'
+      - '89e95b76-444d-4c62-991a-0facbeda640c'
+  filter_machine_accounts:
+    SubjectUserName|endswith: '$'
+  filter_aad_connect:
+    SubjectUserName|startswith:
+      - 'MSOL_'
+      - 'AAD_'
+  condition: selection and not 1 of filter_*
+falsepositives:
+  - Azure AD Connect and other identity sync accounts that hold replication rights by design.
+level: high
