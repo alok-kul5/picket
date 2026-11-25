@@ -1,0 +1,24 @@
+title: Process Command-Line Auditing Disabled
+id: c342bbe2-026f-5b87-a339-1083d40753e9
+status: test
+description: Detects the policy value that adds command lines to event 4688 being set to 0. Turning it off hides what later processes run.
+references:
+  - https://attack.mitre.org/techniques/T1562/002/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.defense-evasion
+  - attack.t1562.002
+logsource:
+  category: registry_set
+  product: windows
+detection:
+  selection:
+    TargetObject|endswith: '\Policies\System\Audit\ProcessCreationIncludeCmdLine_Enabled'
+    Details:
+      - 'DWORD (0x00000000)'
+      - '0'
+  condition: selection
+falsepositives:
+  - A Group Policy change that rolls the setting back. It should match a change record.
+level: high

@@ -1,0 +1,27 @@
+title: Audit Policy Success or Failure Auditing Removed
+id: 7fbcbf59-98e0-5192-834a-313a8b2c4374
+status: test
+description: Detects event 4719 where an interactive account removes success or failure auditing from a subcategory, for example with "auditpol /set ... /success:disable" or "auditpol /clear". Changes made by the machine account during Group Policy refresh are excluded.
+references:
+  - https://attack.mitre.org/techniques/T1562/002/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.defense-evasion
+  - attack.t1562.002
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4719
+    AuditPolicyChanges|contains:
+      - '%%8448'
+      - '%%8450'
+  filter_system:
+    - SubjectLogonId: '0x3e7'
+    - SubjectUserName|endswith: '$'
+  condition: selection and not filter_system
+falsepositives:
+  - Administrators tuning audit noise by hand. Central GPO changes, which this rule ignores, are the better route.
+level: high

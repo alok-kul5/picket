@@ -1,0 +1,39 @@
+title: Service Installed With a Shell or Script Host Image Path
+id: 0248184f-3700-5a4e-98d8-893dc9794e41
+status: test
+description: Detects System event 7045 where a newly installed service runs cmd, PowerShell, a LOLBin or a binary from a writable or admin-share path. PsExec-style tools (Impacket, Empire, Metasploit) install exactly this kind of service to run commands remotely as SYSTEM.
+references:
+  - https://attack.mitre.org/techniques/T1569/002/
+  - https://attack.mitre.org/techniques/T1021/002/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.execution
+  - attack.t1569.002
+  - attack.lateral-movement
+  - attack.t1021.002
+logsource:
+  product: windows
+  service: system
+detection:
+  selection_event:
+    EventID: 7045
+  selection_path:
+    ImagePath|contains:
+      - '%COMSPEC%'
+      - 'cmd.exe'
+      - 'cmd /c'
+      - 'powershell'
+      - 'pwsh'
+      - 'mshta'
+      - 'rundll32'
+      - 'regsvr32'
+      - ' -enc'
+      - '\ADMIN$\'
+      - '\Users\Public\'
+      - '\Windows\Temp\'
+      - 'calc.exe'
+  condition: all of selection_*
+falsepositives:
+  - Some installers briefly register a helper service that calls cmd.exe. Check whether the service is removed seconds later and who installed it.
+level: high

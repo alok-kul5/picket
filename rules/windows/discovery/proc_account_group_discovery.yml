@@ -1,0 +1,39 @@
+title: Local Account and Group Discovery
+id: 79c578c6-41a4-5d40-905c-532d07dc6427
+status: test
+description: Detects enumeration of local users and groups with net.exe or net1.exe, or with the Seatbelt host survey tool. Attackers run these early after access to find admin accounts.
+references:
+  - https://attack.mitre.org/techniques/T1087/001/
+  - https://attack.mitre.org/techniques/T1069/001/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.discovery
+  - attack.t1087.001
+  - attack.t1069.001
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_net_img:
+    Image|endswith:
+      - '\net.exe'
+      - '\net1.exe'
+  selection_net_cli:
+    CommandLine|contains:
+      - ' user'
+      - ' localgroup'
+      - ' group'
+  selection_seatbelt:
+    - Image|endswith: '\Seatbelt.exe'
+    - OriginalFileName: 'Seatbelt.exe'
+    - CommandLine|contains:
+        - '-group=user'
+        - '-group=system'
+        - '-group=all'
+  filter_net_use:
+    CommandLine|contains: ' use '
+  condition: ((selection_net_img and selection_net_cli) or selection_seatbelt) and not filter_net_use
+falsepositives:
+  - Helpdesk staff and admin scripts that check group membership. Tune by user and parent process.
+level: low

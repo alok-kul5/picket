@@ -1,0 +1,47 @@
+title: MSBuild Building From a Staging Folder or Spawning a Shell
+id: d348b9d4-a6a3-5ed4-9b80-15c2ab07a6cc
+status: test
+description: Detects MSBuild compiling a project file kept in a writable staging folder or with a non-project extension, or MSBuild spawning PowerShell or cmd. Inline C# tasks let MSBuild run arbitrary code as a trusted developer tool.
+references:
+  - https://attack.mitre.org/techniques/T1127/001/
+  - https://lolbas-project.github.io/lolbas/Binaries/Msbuild/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.defense-evasion
+  - attack.t1127.001
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith: '\MSBuild.exe'
+    - OriginalFileName: 'MSBuild.exe'
+  selection_path:
+    CommandLine|contains:
+      - '\Windows\Tasks\'
+      - '\Windows\Temp\'
+      - '\Users\Public\'
+      - '\ProgramData\'
+      - '\AppData\Local\Temp\'
+      - '\Downloads\'
+  selection_ext:
+    CommandLine|endswith:
+      - '.xml'
+      - '.txt'
+      - '.dat'
+      - '.log'
+  selection_child_parent:
+    ParentImage|endswith: '\MSBuild.exe'
+  selection_child_img:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\cmd.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+  condition: (selection_img and (selection_path or selection_ext)) or (selection_child_parent and selection_child_img)
+falsepositives:
+  - Build servers that keep sources under ProgramData or a temp folder.
+  - Build scripts that call cmd.exe from an Exec task. Scope the rule to non-developer hosts.
+level: medium

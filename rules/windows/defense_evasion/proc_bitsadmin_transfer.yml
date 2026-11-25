@@ -1,0 +1,31 @@
+title: Bitsadmin Download or Job Notification Abuse
+id: 35dc73e9-9c8c-5afc-85a7-6f0372ae6d35
+status: test
+description: Detects bitsadmin.exe creating a transfer job or setting a notify command line. BITS jobs download payloads quietly and can re-run a command on completion for persistence.
+references:
+  - https://attack.mitre.org/techniques/T1197/
+  - https://lolbas-project.github.io/lolbas/Binaries/Bitsadmin/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.defense-evasion
+  - attack.persistence
+  - attack.t1197
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith: '\bitsadmin.exe'
+    - OriginalFileName: 'bitsadmin.exe'
+  selection_cli:
+    CommandLine|contains:
+      - '/transfer'
+      - '/addfile'
+      - '/create'
+      - '/SetNotifyCmdLine'
+      - '/resume'
+  condition: all of selection_*
+falsepositives:
+  - Old software installers that still shell out to bitsadmin. Modern Windows components use the BITS API, not the CLI.
+level: medium

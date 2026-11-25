@@ -1,0 +1,30 @@
+title: WMI Permanent Event Subscription Created
+id: b501d3bc-eb8d-515e-b43d-27138ab25bc9
+status: test
+description: Detects a WMI event consumer or a filter-to-consumer binding being created (Sysmon events 20 and 21). Permanent subscriptions run a command or script whenever a WMI event fires, which gives fileless persistence that survives reboots.
+references:
+  - https://attack.mitre.org/techniques/T1546/003/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.persistence
+  - attack.privilege-escalation
+  - attack.t1546.003
+logsource:
+  category: wmi_event
+  product: windows
+detection:
+  selection:
+    EventID:
+      - 20
+      - 21
+  filter_scm:
+    - Name|contains: 'SCM Event Log Consumer'
+    - Consumer|contains: 'SCM Event Log Consumer'
+  filter_bvt:
+    - Name|contains: 'BVTConsumer'
+    - Consumer|contains: 'BVTConsumer'
+  condition: selection and not 1 of filter_*
+falsepositives:
+  - Management agents (SCCM, some monitoring tools) that register their own consumers. Allow-list them by consumer name.
+level: high

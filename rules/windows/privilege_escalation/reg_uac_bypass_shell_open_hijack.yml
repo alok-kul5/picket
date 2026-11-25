@@ -1,0 +1,30 @@
+title: UAC Bypass via Per-User Shell Open Command Hijack
+id: 3bf8808e-1efd-5685-9939-35cb7b51929a
+status: test
+description: Detects a user writing a shell open/runas command handler under their own Classes hive for ms-settings, mscfile, exefile or Folder. Auto-elevating binaries such as fodhelper, eventvwr and sdclt read these keys and launch the planted command at high integrity without a UAC prompt.
+references:
+  - https://attack.mitre.org/techniques/T1548/002/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.privilege-escalation
+  - attack.defense-evasion
+  - attack.t1548.002
+logsource:
+  category: registry_set
+  product: windows
+detection:
+  selection_hive:
+    TargetObject|contains: '_Classes\'
+  selection_key:
+    TargetObject|contains:
+      - '\ms-settings\shell\open\command'
+      - '\mscfile\shell\open\command'
+      - '\exefile\shell\runas\command'
+      - '\exefile\shell\open\command'
+      - '\Folder\shell\open\command'
+      - '\Launcher.SystemSettings\shell\open\command'
+  condition: all of selection_*
+falsepositives:
+  - None known. Legitimate software registers these handlers machine-wide, not per user.
+level: high

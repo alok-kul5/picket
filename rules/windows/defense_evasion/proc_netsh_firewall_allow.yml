@@ -1,0 +1,40 @@
+title: Firewall Rule Added or Firewall Disabled via Netsh
+id: 80504f88-fc02-58ae-9f7e-3f6c198c13d4
+status: test
+description: Detects netsh adding an inbound allow rule or opening a port, or turning the Windows firewall off. Attackers do this to expose a backdoor listener or allow lateral movement traffic.
+references:
+  - https://attack.mitre.org/techniques/T1562/004/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.defense-evasion
+  - attack.t1562.004
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith: '\netsh.exe'
+    - OriginalFileName: 'netsh.exe'
+  selection_add_rule:
+    CommandLine|contains|all:
+      - 'firewall'
+      - 'add'
+  selection_legacy_open:
+    CommandLine|contains:
+      - 'portopening'
+      - 'allowedprogram'
+  selection_disable:
+    CommandLine|contains|all:
+      - 'firewall'
+      - 'state off'
+  selection_opmode:
+    CommandLine|contains: 'opmode disable'
+  filter_installed_app:
+    ParentImage|startswith:
+      - 'C:\Program Files\'
+      - 'C:\Program Files (x86)\'
+  condition: selection_img and (selection_add_rule or selection_legacy_open or selection_disable or selection_opmode) and not filter_installed_app
+falsepositives:
+  - Application installers that register their own firewall exceptions. Review the rule name and the parent process.
+level: medium

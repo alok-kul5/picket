@@ -1,0 +1,21 @@
+title: Netsh PortProxy Port Forwarding Configured
+id: 4ce97c9a-83bc-5318-bb21-fcd57a68c6e4
+status: test
+description: Detects a value being written under the PortProxy service key, which is how "netsh interface portproxy" stores port forwards. Attackers use it to tunnel RDP or other services through a compromised host. Watching the registry also catches abbreviated netsh syntax that command-line rules miss.
+references:
+  - https://attack.mitre.org/techniques/T1090/001/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.command-and-control
+  - attack.t1090.001
+logsource:
+  category: registry_set
+  product: windows
+detection:
+  selection:
+    TargetObject|contains: '\Services\PortProxy\'
+  condition: selection
+falsepositives:
+  - IPv6 transition setups and lab or dev boxes that forward ports on purpose.
+level: medium

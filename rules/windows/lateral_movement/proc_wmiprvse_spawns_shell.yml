@@ -1,0 +1,34 @@
+title: WMI Provider Host Spawning a Shell or Script Host
+id: 87ccab5c-feb2-5a2c-81e2-5d7ff8c999e4
+status: test
+description: Detects WmiPrvSE.exe starting cmd, PowerShell or another script host. Win32_Process.Create calls made over WMI (wmic /node, Invoke-WmiMethod, Impacket wmiexec) show up this way on the target host.
+references:
+  - https://attack.mitre.org/techniques/T1047/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.execution
+  - attack.t1047
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_parent:
+    ParentImage|endswith: '\WmiPrvSE.exe'
+  selection_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\mshta.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+      - '\MSBuild.exe'
+  filter_wmi_ping:
+    CommandLine|contains: '\Windows\CCM\'
+  condition: all of selection_* and not filter_wmi_ping
+falsepositives:
+  - Configuration management tools (SCCM, some RMM agents) that run scripts through WMI.
+level: high

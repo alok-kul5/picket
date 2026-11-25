@@ -1,0 +1,32 @@
+title: CMSTP Installing a Connection Profile Silently
+id: e3952c0f-2327-547c-aa4d-7df204495753
+status: test
+description: Detects cmstp.exe installing an INF/INI profile silently or for all users. Attackers abuse the RunPreSetupCommands section of a crafted profile to run code and to bypass UAC through the CMSTPLUA COM interface.
+references:
+  - https://attack.mitre.org/techniques/T1218/003/
+  - https://lolbas-project.github.io/lolbas/Binaries/Cmstp/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.defense-evasion
+  - attack.t1218.003
+  - attack.privilege-escalation
+  - attack.t1548.002
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith: '\cmstp.exe'
+    - OriginalFileName: 'CMSTP.EXE'
+  selection_cli:
+    CommandLine|contains:
+      - '/s '
+      - '/au'
+      - '/ni'
+      - '-s '
+      - '-au'
+  condition: all of selection_*
+falsepositives:
+  - VPN profile rollouts built with the Connection Manager Administration Kit. These come from software deployment tools, not user shells.
+level: high

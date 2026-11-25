@@ -1,0 +1,45 @@
+title: Run Key Persistence Pointing at a Script Host or Staging Folder
+id: e7ca07a4-5007-5652-b2a5-a9444d8ef72e
+status: test
+description: Detects a Run or RunOnce autostart value that launches a script interpreter or LOLBin, or a binary in a user-writable staging folder. Also catches values with an empty name, a trick used to hide entries from some tools.
+references:
+  - https://attack.mitre.org/techniques/T1547/001/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.persistence
+  - attack.t1547.001
+logsource:
+  category: registry_set
+  product: windows
+detection:
+  selection_key:
+    TargetObject|contains:
+      - '\Software\Microsoft\Windows\CurrentVersion\Run'
+      - '\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run'
+  selection_value:
+    Details|contains:
+      - 'powershell'
+      - 'pwsh'
+      - 'cmd.exe /c'
+      - 'cmd /c'
+      - 'mshta'
+      - 'rundll32'
+      - 'regsvr32'
+      - 'wscript'
+      - 'cscript'
+      - ' -enc'
+      - 'http://'
+      - 'https://'
+      - '\AppData\Local\Temp\'
+      - '\Windows\Temp\'
+      - '\Windows\Tasks\'
+      - '\Users\Public\'
+  selection_hidden_name:
+    TargetObject|endswith: '\CurrentVersion\Run\'
+  filter_onedrive:
+    Details|contains: '\Microsoft\OneDrive\'
+  condition: selection_key and (selection_value or selection_hidden_name) and not filter_onedrive
+falsepositives:
+  - Software updaters that register a script or rundll32 helper at logon. Allow-list by value name and signer.
+level: high

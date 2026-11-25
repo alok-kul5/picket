@@ -1,0 +1,29 @@
+title: Regsvr32 Loading a COM Scriptlet (Squiblydoo)
+id: e52f332f-c186-5414-ba1d-6a6b5aa90201
+status: test
+description: Detects regsvr32 passing a scriptlet URL or file to scrobj.dll with the /i switch. This runs attacker JScript or VBScript through a signed Microsoft binary and bypasses application control.
+references:
+  - https://attack.mitre.org/techniques/T1218/010/
+  - https://lolbas-project.github.io/lolbas/Binaries/Regsvr32/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.defense-evasion
+  - attack.t1218.010
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith: '\regsvr32.exe'
+    - OriginalFileName: 'REGSVR32.EXE'
+  selection_dll:
+    CommandLine|contains: 'scrobj'
+  selection_switch:
+    CommandLine|contains:
+      - '/i:'
+      - '-i:'
+  condition: all of selection_*
+falsepositives:
+  - None known. Legitimate COM registration does not use scrobj.dll with a scriptlet.
+level: high

@@ -1,0 +1,32 @@
+title: WMIC Loading a Remote or Custom XSL Stylesheet
+id: 46b84f4c-e99d-5178-9e5a-97a3cd1b46a5
+status: test
+description: Detects wmic.exe with a /format switch that points at a URL or an .xsl file. WMIC runs any JScript or VBScript embedded in the stylesheet, so it can run code from a signed binary (Squiblytwo).
+references:
+  - https://attack.mitre.org/techniques/T1220/
+  - https://lolbas-project.github.io/lolbas/Binaries/Wmic/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.defense-evasion
+  - attack.t1220
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith: '\wmic.exe'
+    - OriginalFileName: 'wmic.exe'
+  selection_format:
+    CommandLine|contains:
+      - '/format:'
+      - '-format:'
+  selection_payload:
+    CommandLine|contains:
+      - 'http://'
+      - 'https://'
+      - '.xsl'
+  condition: all of selection_*
+falsepositives:
+  - Reporting scripts that use a custom local .xsl template. Rare, and easy to allow-list by path.
+level: high
