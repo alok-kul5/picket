@@ -171,6 +171,7 @@ def build() -> dict:
     out = ROOT / "site" / "data"
     out.mkdir(parents=True, exist_ok=True)
     (out / "dashboard.json").write_text(json.dumps(dashboard), encoding="utf-8")
+    (out / "picket-attack-layer.json").write_text(json.dumps(layer, indent=2), encoding="utf-8")
     return dashboard
 
 

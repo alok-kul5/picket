@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Picket · Detection Coverage</title>
+  <meta name="description" content="30 Sigma rules mapped to MITRE ATT&CK, replay-tested against public attack telemetry and 1.19M clean Windows events.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307090c'/%3E%3Cpath d='M7 25V11l2-3 2 3v14zm7 0V9l2-3 2 3v16zm7 0V11l2-3 2 3v14z' fill='%23ffb020'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Picket home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 25V11l2-3 2 3v14zm7 0V9l2-3 2 3v16zm7 0V11l2-3 2 3v14z"/></svg>
+      <span>Picket</span>
+    </a>
+    <nav>
+      <a href="#coverage">Coverage</a>
+      <a href="#rules">Rules</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#data">Data</a>
+    </nav>
+    <a class="gh" id="gh-link" href="https://github.com/alok-kul5/picket">GitHub ↗</a>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="kicker"><span class="dot"></span> Detection-as-code · Sigma · <span id="attack-ver">ATT&amp;CK</span></p>
+        <h1>
+          <span class="count" data-key="rules">30</span> rules.
+          <span class="count" data-key="scenarios_detected">47</span> attack scenarios caught.
+          <em><span class="count" data-key="fp_total">3</span> false positives</em> in
+          <span class="count" data-key="benign_events" data-format="compact">1.19M</span> clean events.
+        </h1>
+        <p class="lede">Every push lints the rules, converts them to Splunk, Elastic and Microsoft KQL with pySigma, then replays public attack captures and clean Windows baselines through them. A rule that misses its attack or goes over its noise budget fails the build.</p>
+        <div class="cta">
+          <a class="btn primary" href="#rules">Explore the rules</a>
+          <a class="btn" id="layer-link" href="data/picket-attack-layer.json" download>Navigator layer ↓</a>
+        </div>
+      </div>
+      <div class="fence-wrap">
+        <div class="fence" id="fence" aria-label="One picket per rule, height is the number of attack events it matched"></div>
+        <div class="fence-axis"><span>one picket per rule · height = attack events matched (log)</span><span id="fence-hover">hover a picket</span></div>
+      </div>
+    </section>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="block" id="coverage">
+      <div class="block-head">
+        <div>
+          <p class="eyebrow">01 · Coverage</p>
+          <h2>Where the fence stands on the ATT&amp;CK matrix</h2>
+        </div>
+        <p class="block-note" id="cov-note"></p>
+      </div>
+      <div class="legend">
+        <span><i class="sw s0"></i>not covered</span>
+        <span><i class="sw s1"></i>1 rule</span>
+        <span><i class="sw s2"></i>2 rules</span>
+        <span><i class="sw s3"></i>3+ rules</span>
+        <span class="legend-tip">Click a lit cell to filter the rules below.</span>
+      </div>
+      <div class="matrix" id="matrix"></div>
+      <div class="tooltip" id="tooltip" role="tooltip"></div>
+    </section>
+
+    <section class="block" id="rules">
+      <div class="block-head">
+        <div>
+          <p class="eyebrow">02 · Rules</p>
+          <h2>Each rule, the attacks it caught and the noise it made</h2>
+        </div>
+        <div class="filters">
+          <input id="search" type="search" placeholder="Search rules, techniques, LOLBins…" aria-label="Search rules">
+          <div class="chips" id="platform-chips"></div>
+        </div>
+      </div>
+      <div class="active-filter" id="active-filter" hidden></div>
+      <div class="rule-list" id="rule-list"></div>
+    </section>
+
+    <section class="block" id="pipeline">
+      <div class="block-head">
+        <div>
+          <p class="eyebrow">03 · Pipeline</p>
+          <h2>What runs on every push</h2>
+        </div>
+        <p class="block-note">GitHub Actions, Python 3.11, no paid services. Datasets are fetched by script, cached between runs and never committed.</p>
+      </div>
+      <div class="pipe" id="pipe"></div>
+    </section>
+
+    <section class="block" id="data">
+      <div class="block-head">
+        <div>
+          <p class="eyebrow">04 · Data</p>
+          <h2>What the rules were replayed against</h2>
+        </div>
+        <p class="block-note">Logs only. No malware samples are downloaded or run. Synthetic fixtures fill the gaps the public captures leave and are labelled as synthetic.</p>
+      </div>
+      <div class="datasets" id="datasets"></div>
+    </section>
+  </main>
+
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-scrim" data-close></div>
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="d-title">
+      <button class="drawer-close" data-close aria-label="Close">×</button>
+      <div id="drawer-body"></div>
+    </div>
+  </aside>
+
+  <footer class="foot">
+    <div>
+      <strong>Picket</strong> · built <span id="built"></span> from <a id="commit" href="#">commit</a>
+    </div>
+    <div class="foot-links">
+      <a href="https://github.com/OTRF/Security-Datasets">OTRF Security-Datasets</a>
+      <a href="https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES">EVTX-ATTACK-SAMPLES</a>
+      <a href="https://github.com/NextronSystems/evtx-baseline">Nextron evtx-baseline</a>
+      <a href="https://github.com/SigmaHQ/pySigma">pySigma</a>
+    </div>
+  </footer>
+
+  <noscript><p class="noscript">This dashboard needs JavaScript to render the replay results.</p></noscript>
+  <script src="app.js"></script>
+</body>
+</html>
