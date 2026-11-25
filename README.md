@@ -26,9 +26,8 @@ KQL is 20/30 because Defender XDR has no table for the Windows Security and Syst
 flowchart LR
     A[Sigma rules<br/>rules/**/*.yml] --> B[Lint<br/>30 pySigma validators<br/>+ house rules]
     B --> C[Convert<br/>pySigma backends<br/>SPL · Lucene · KQL]
-    D[(OTRF Security-Datasets<br/>EVTX-ATTACK-SAMPLES)] --> F
-    E[(Nextron clean baselines<br/>+ synthetic fixtures)] --> F
-    D & E -. fetch by script,<br/>cached, never committed .-> F[Normalise<br/>EVTX · JSON · auditd · CSV<br/>→ JSONL]
+    D[(OTRF Security-Datasets<br/>EVTX-ATTACK-SAMPLES)] -. fetch by script .-> F
+    E[(Nextron clean baselines<br/>+ synthetic fixtures)] -. cached, never committed .-> F[Normalise<br/>EVTX · JSON · auditd · CSV<br/>→ JSONL]
     C --> G
     F --> G[Replay<br/>Sigma engine runs each<br/>rule's condition tree]
     G --> H{Assert<br/>every scenario hit?<br/>FP ≤ budget?}
@@ -116,7 +115,7 @@ python -m pytest -q           # engine and normaliser unit tests
 python -m http.server 8000 --directory site      # dashboard at http://localhost:8000
 ```
 
-The first `fetch` downloads about 150 MB (mostly the two Nextron baselines) into `.cache/`. Later runs reuse it. Run single steps with `python -m picket lint|convert|fetch|replay|coverage`. Converted queries land in `build/queries/{splunk,elastic,kql}/`.
+The first `fetch` downloads about 200 MB (mostly the two Nextron baselines and the ATT&CK STIX bundle) into `.cache/`. Later runs reuse it. Run single steps with `python -m picket lint|convert|fetch|replay|coverage`. Converted queries land in `build/queries/{splunk,elastic,kql}/`.
 
 ## Layout
 
