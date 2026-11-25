@@ -142,7 +142,9 @@ def by_name(name: str, data: bytes) -> Iterator[Event]:
         yield from honeybucket_csv(text)
     elif lower.endswith(".log"):
         yield from auditd_lines(text)
-    elif lower.endswith((".json", ".jsonl")):
+    elif lower.endswith(".jsonl"):
+        yield from jsonl(text)
+    elif lower.endswith(".json"):
         yield from otrf_json(text)
 
 

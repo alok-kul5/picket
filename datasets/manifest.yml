@@ -18,6 +18,11 @@ sources:
     url: https://github.com/NextronSystems/evtx-baseline
     licence: Apache-2.0
     base: https://github.com/NextronSystems/evtx-baseline/releases/download/v0.8.5/
+  fixture:
+    name: Synthetic fixtures in this repo (fixtures/make_fixtures.py)
+    url: fixtures/
+    licence: MIT
+    local: true
 
 datasets:
   # ---- attack telemetry: OTRF ----
@@ -67,8 +72,15 @@ datasets:
   - {id: evtx_eventvwr_uac, source: evtx, kind: attack, path: "Privilege Escalation/Sysmon_13_1_UAC_Bypass_EventVwrBypass.evtx"}
   - {id: evtx_sdclt_uac, source: evtx, kind: attack, path: "Privilege Escalation/Sysmon_13_1_UACBypass_SDCLTBypass.evtx"}
   - {id: evtx_netsh_portproxy, source: evtx, kind: attack, path: "Defense Evasion/de_portforward_netsh_rdp_sysmon_13_1.evtx"}
+  # ---- attack shapes missing from public captures (synthetic, marked _synthetic) ----
+  - {id: fx_win_net_discovery, source: fixture, kind: attack, path: attack/win_net_account_discovery.jsonl}
+  - {id: fx_aws_cloudtrail_tampering, source: fixture, kind: attack, path: attack/aws_cloudtrail_tampering.jsonl}
+
   - {id: evtx_hidden_runkey, source: evtx, kind: attack, path: "Persistence/evasion_persis_hidden_run_keyvalue_sysmon_13.evtx"}
 
   # ---- benign baselines: clean Windows installs with normal user activity ----
   - {id: baseline_win10, source: nextron, kind: benign, path: win10-client.tgz}
   - {id: baseline_win2022_ad, source: nextron, kind: benign, path: win2022-ad.tgz}
+  - {id: fx_windows_hard_negatives, source: fixture, kind: benign, path: benign/windows_hard_negatives.jsonl}
+  - {id: fx_linux_benign, source: fixture, kind: benign, path: benign/linux_auditd.jsonl}
+  - {id: fx_aws_benign, source: fixture, kind: benign, path: benign/aws_cloudtrail.jsonl}

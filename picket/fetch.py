@@ -88,8 +88,11 @@ def build(ds: dict, sources: dict, force: bool = False) -> Path:
     if out.exists() and not force:
         return out
     src = sources[ds["source"]]
-    url = src["base"] + urllib.parse.quote(ds["path"])
-    raw = _download(url, RAW / ds["id"] / ds["path"].rsplit("/", 1)[-1])
+    if src.get("local"):
+        raw = ROOT / "fixtures" / ds["path"]
+    else:
+        url = src["base"] + urllib.parse.quote(ds["path"])
+        raw = _download(url, RAW / ds["id"] / ds["path"].rsplit("/", 1)[-1])
     EVENTS.mkdir(parents=True, exist_ok=True)
     n = 0
     tmp = out.with_suffix(".part")
