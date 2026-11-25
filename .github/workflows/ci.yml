@@ -1,0 +1,94 @@
+name: detections
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 4 * * 1"   # weekly, catches upstream dataset or ATT&CK changes
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: lint, convert, replay
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Unit tests
+        run: python -m pytest -q
+
+      - name: Lint rules
+        run: python -m picket lint
+
+      - name: Convert with pySigma
+        run: python -m picket convert
+
+      - name: Restore datasets
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/raw
+            .cache/events
+            .cache/enterprise-attack.json
+          key: datasets-${{ hashFiles('datasets/manifest.yml', 'picket/fetch.py', 'picket/normalize.py', 'fixtures/**') }}
+          restore-keys: datasets-
+
+      - name: Fetch datasets
+        run: python -m picket fetch
+
+      - name: Replay attacks and baselines
+        run: python -m picket replay
+
+      - name: Coverage layer and dashboard data
+        if: always()
+        run: python -m picket coverage
+
+      - name: Job summary
+        if: always()
+        run: python -m picket.summary >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: picket-results
+          path: |
+            build/
+            coverage/
+
+      - name: Package site
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    name: publish dashboard
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
