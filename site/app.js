@@ -22,6 +22,9 @@
   const PRODUCT_LABEL = { windows: "Windows", linux: "Linux", aws: "AWS" };
 
   const state = { data: null, platform: "all", query: "", technique: null };
+  // ?still (screenshots) or reduced motion: render the final state with no load animation
+  const STILL = new URLSearchParams(location.search).has("still") || matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (STILL) document.documentElement.classList.add("still");
 
   fetch("data/dashboard.json", { cache: "no-cache" })
     .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
@@ -47,6 +50,8 @@
     renderDatasets();
     bindDrawer();
     $("#search").addEventListener("input", (e) => { state.query = e.target.value.trim().toLowerCase(); renderRules(); });
+    const deep = new URLSearchParams(location.search).get("rule");
+    if (deep && d.rules.some((r) => r.slug === deep)) openRule(deep);
   }
 
   /* ---------- hero counters ---------- */
@@ -64,6 +69,7 @@
         el.textContent = show(target * e);
         if (t < 1) requestAnimationFrame(tick);
       };
+      if (STILL) { el.textContent = show(target); return; }
       el.textContent = show(0);
       requestAnimationFrame(tick);
     });

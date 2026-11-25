@@ -6,6 +6,9 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def main() -> None:
+    import sys
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     path = ROOT / "build" / "results.json"
     if not path.exists():
         print("No replay results (the replay step did not run).")

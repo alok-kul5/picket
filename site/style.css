@@ -273,7 +273,7 @@ h2 { margin: 0; max-width: 22ch; font-size: clamp(28px, 3.6vw, 48px); line-heigh
 .tab { padding: 9px 14px; border: 1px solid var(--line); border-bottom: 0; border-radius: 10px 10px 0 0; background: transparent; color: var(--muted); font: 500 13px var(--display); cursor: pointer; }
 .tab.on { background: var(--panel); color: var(--text); }
 .tab.na { opacity: .45; }
-.code { position: relative; margin: 0; padding: 18px; border: 1px solid var(--line); border-radius: 0 10px 10px 10px; background: var(--panel); font: 12.5px/1.6 var(--mono); color: #dfe6ee; white-space: pre-wrap; word-break: break-word; max-height: 320px; overflow: auto; }
+.code { position: relative; margin: 0; padding: 44px 18px 18px; border: 1px solid var(--line); border-radius: 0 10px 10px 10px; background: var(--panel); font: 12.5px/1.6 var(--mono); color: #dfe6ee; white-space: pre-wrap; word-break: break-word; max-height: 320px; overflow: auto; }
 .copy { position: absolute; top: 10px; right: 10px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--line-2); background: var(--ink-2); color: var(--muted); font: 11px var(--mono); cursor: pointer; }
 .d-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
 
@@ -322,3 +322,5 @@ h2 { margin: 0; max-width: 22ch; font-size: clamp(28px, 3.6vw, 48px); line-heigh
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; transition-duration: .01ms !important; }
 }
+
+.still *, .still *::before, .still *::after { animation-duration: 0s !important; animation-delay: 0s !important; transition: none !important; }
