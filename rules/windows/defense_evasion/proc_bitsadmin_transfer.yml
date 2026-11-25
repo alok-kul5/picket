@@ -8,7 +8,7 @@ references:
 author: alok-kul5
 date: 2026-11-25
 tags:
-  - attack.defense-evasion
+  - attack.stealth
   - attack.persistence
   - attack.t1197
 logsource:

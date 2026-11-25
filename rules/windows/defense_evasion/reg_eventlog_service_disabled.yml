@@ -3,12 +3,12 @@ id: a3578130-8410-523a-b18b-ca1b1baa3350
 status: test
 description: Detects the EventLog service start type being set to Disabled, or an EventLog autologger session being switched off. After the next reboot the host stops writing event logs.
 references:
-  - https://attack.mitre.org/techniques/T1562/002/
+  - https://attack.mitre.org/techniques/T1685/001/
 author: alok-kul5
 date: 2026-11-25
 tags:
-  - attack.defense-evasion
-  - attack.t1562.002
+  - attack.defense-impairment
+  - attack.t1685.001
 logsource:
   category: registry_set
   product: windows

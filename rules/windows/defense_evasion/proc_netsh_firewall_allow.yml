@@ -3,12 +3,12 @@ id: 80504f88-fc02-58ae-9f7e-3f6c198c13d4
 status: test
 description: Detects netsh adding an inbound allow rule or opening a port, or turning the Windows firewall off. Attackers do this to expose a backdoor listener or allow lateral movement traffic.
 references:
-  - https://attack.mitre.org/techniques/T1562/004/
+  - https://attack.mitre.org/techniques/T1686/003/
 author: alok-kul5
 date: 2026-11-25
 tags:
-  - attack.defense-evasion
-  - attack.t1562.004
+  - attack.defense-impairment
+  - attack.t1686.003
 logsource:
   category: process_creation
   product: windows

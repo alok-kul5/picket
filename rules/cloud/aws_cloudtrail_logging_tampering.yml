@@ -3,12 +3,12 @@ id: 63be392e-05e6-538e-85ac-24d4d6c0a48a
 status: test
 description: Detects calls that stop a trail, delete it, or change where or what it logs. Attackers do this right after gaining access so later actions leave no audit record.
 references:
-  - https://attack.mitre.org/techniques/T1562/008/
+  - https://attack.mitre.org/techniques/T1685/002/
 author: alok-kul5
 date: 2026-11-25
 tags:
-  - attack.defense-evasion
-  - attack.t1562.008
+  - attack.defense-impairment
+  - attack.t1685.002
 logsource:
   product: aws
   service: cloudtrail

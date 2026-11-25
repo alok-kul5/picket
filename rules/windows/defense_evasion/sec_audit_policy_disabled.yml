@@ -3,12 +3,12 @@ id: 7fbcbf59-98e0-5192-834a-313a8b2c4374
 status: test
 description: Detects event 4719 where an interactive account removes success or failure auditing from a subcategory, for example with "auditpol /set ... /success:disable" or "auditpol /clear". Changes made by the machine account during Group Policy refresh are excluded.
 references:
-  - https://attack.mitre.org/techniques/T1562/002/
+  - https://attack.mitre.org/techniques/T1685/001/
 author: alok-kul5
 date: 2026-11-25
 tags:
-  - attack.defense-evasion
-  - attack.t1562.002
+  - attack.defense-impairment
+  - attack.t1685.001
 logsource:
   product: windows
   service: security
