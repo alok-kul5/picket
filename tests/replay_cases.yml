@@ -1,0 +1,54 @@
+# Which attack scenarios each rule must catch, and how much benign noise it may raise.
+#
+#   positives  datasets (ids from datasets/manifest.yml) the rule must fire on, at least min_hits times each
+#   max_fp     benign events the rule may match across every benign corpus (default 0)
+#
+# Benign corpora are every dataset with kind: benign. A rule is only scored on the
+# benign events from its own log source, so the FP rate's denominator is honest.
+
+defaults:
+  min_hits: 1
+  max_fp: 0
+
+rules:
+  # credential access
+  proc_lsass_dump_comsvcs:            {positives: [otrf_comsvcs_dump, evtx_comsvcs]}
+  proc_access_lsass_credential_read:  {positives: [otrf_mimikatz_logonpasswords, evtx_mimikatz], max_fp: 2}   # DropboxUpdate run from %TEMP%, see docs
+  proc_ntdsutil_ifm_dump:             {positives: [otrf_ntdsutil]}
+  proc_sam_hive_copy:                 {positives: [otrf_reg_dump_sam, otrf_esentutl_sam]}
+  sec_dcsync_replication_request:     {positives: [otrf_dcsync_empire, otrf_dcsync_covenant, evtx_dcsync]}
+
+  # defense evasion
+  proc_mshta_script_execution:        {positives: [otrf_mshta_vbs, otrf_mshta_js, evtx_mshta]}
+  proc_regsvr32_scriptlet:            {positives: [otrf_regsvr32_sct, evtx_regsvr32_sct, evtx_bits_persist]}
+  proc_cmstp_inf_execution:           {positives: [otrf_cmstp, evtx_cmstp]}
+  proc_bitsadmin_transfer:            {positives: [otrf_bitsadmin]}
+  proc_netsh_firewall_allow:          {positives: [otrf_netsh_fw]}
+  reg_portproxy_forwarding:           {positives: [evtx_netsh_portproxy]}
+  reg_cmdline_auditing_disabled:      {positives: [otrf_cmdline_logging_off]}
+  reg_eventlog_service_disabled:      {positives: [otrf_eventlog_svc_disabled]}
+  sec_audit_policy_disabled:          {positives: [otrf_auditpol]}
+  reg_wdigest_logon_credential:       {positives: [otrf_wdigest]}
+  proc_wmic_xsl_script:               {positives: [otrf_wmic_xsl, evtx_wmic_xsl]}
+  proc_msbuild_inline_task:           {positives: [otrf_msbuild]}
+
+  # persistence and privilege escalation
+  reg_run_key_suspicious_value:       {positives: [otrf_runkey, evtx_hidden_runkey]}
+  proc_schtasks_suspicious_create:    {positives: [otrf_schtasks], max_fp: 1}   # Inno Setup task XML staged in %TEMP%, see docs
+  wmi_event_subscription:             {positives: [otrf_wmi_subscription, evtx_wmi_subscription]}
+  proc_sc_service_binpath_change:     {positives: [otrf_svc_mod_fax]}
+  reg_uac_bypass_shell_open_hijack:   {positives: [otrf_fodhelper, evtx_eventvwr_uac, evtx_sdclt_uac]}
+
+  # execution, lateral movement, discovery
+  sys_service_install_suspicious_path: {positives: [otrf_psexec, evtx_remote_service]}
+  proc_wmiprvse_spawns_shell:         {positives: [otrf_wmi_exec]}
+  proc_account_group_discovery:       {positives: [otrf_seatbelt_group_user, fx_win_net_discovery]}
+
+  # linux
+  proc_dd_binary_padding:             {positives: [otrf_linux_dd_padding]}
+  proc_arp_cache_discovery:           {positives: [otrf_linux_arp_cache]}
+
+  # aws
+  aws_s3_anonymous_bucket_access:     {positives: [otrf_aws_honeybucket]}
+  aws_ec2_instance_credentials_used_off_host: {positives: [otrf_aws_ec2_proxy]}
+  aws_cloudtrail_logging_tampering:   {positives: [fx_aws_cloudtrail_tampering]}
