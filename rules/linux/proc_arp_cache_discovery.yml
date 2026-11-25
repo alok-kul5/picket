@@ -1,0 +1,35 @@
+title: ARP Cache or Neighbour Table Enumeration
+id: 50d981f4-9c86-5d27-ba30-e570720aa561
+status: test
+description: Detects arp -a or ip neigh in auditd EXECVE records. Reading the ARP cache lists hosts on the local segment without sending scan traffic.
+references:
+  - https://attack.mitre.org/techniques/T1018/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.discovery
+  - attack.t1018
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection_arp:
+    type: 'EXECVE'
+    a0: 'arp'
+    a1:
+      - '-a'
+      - '-an'
+      - '-n'
+      - '-e'
+  selection_ip:
+    type: 'EXECVE'
+    a0: 'ip'
+    a1:
+      - 'neigh'
+      - 'neighbour'
+      - 'neighbor'
+      - 'n'
+  condition: 1 of selection_*
+falsepositives:
+  - Network troubleshooting by administrators. Low on its own; useful when chained with other discovery.
+level: informational

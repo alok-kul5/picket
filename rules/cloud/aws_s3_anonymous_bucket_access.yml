@@ -1,0 +1,33 @@
+title: Anonymous Principal Enumerating or Writing to an S3 Bucket
+id: 8ff7108a-efac-5818-8e80-434266c67ef5
+status: test
+description: Detects S3 data or listing calls made by the anonymous principal. Any hit means a bucket is publicly readable or writable and someone outside the account is probing it, as seen with honey buckets that get found by scanners within hours.
+references:
+  - https://attack.mitre.org/techniques/T1619/
+  - https://attack.mitre.org/techniques/T1530/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.discovery
+  - attack.t1619
+  - attack.collection
+  - attack.t1530
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventSource: 's3.amazonaws.com'
+    userIdentity.accountId: 'ANONYMOUS_PRINCIPAL'
+    eventName:
+      - 'ListObjects'
+      - 'ListObjectsV2'
+      - 'ListBucket'
+      - 'HeadBucket'
+      - 'GetObject'
+      - 'PutObject'
+      - 'GetBucketAcl'
+  condition: selection
+falsepositives:
+  - Buckets that host a public website or public downloads on purpose. Exclude them by bucket name.
+level: medium

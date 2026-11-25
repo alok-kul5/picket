@@ -1,0 +1,35 @@
+title: Binary Padding With dd From /dev/zero or /dev/random
+id: 8d0e6dc8-b848-5973-8b1d-7d547941f9e6
+status: test
+description: Detects dd reading from /dev/zero or /dev/random in auditd EXECVE records. Appending junk bytes to a binary changes its hash and size, which defeats hash-based blocklists and some scanners that skip large files.
+references:
+  - https://attack.mitre.org/techniques/T1027/001/
+author: alok-kul5
+date: 2026-11-25
+tags:
+  - attack.defense-evasion
+  - attack.t1027.001
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection_exec:
+    type: 'EXECVE'
+    a0: 'dd'
+  selection_source:
+    - a1|contains:
+        - 'if=/dev/zero'
+        - 'if=/dev/random'
+        - 'if=/dev/urandom'
+    - a2|contains:
+        - 'if=/dev/zero'
+        - 'if=/dev/random'
+        - 'if=/dev/urandom'
+  selection_append:
+    - a2|startswith: 'bs='
+    - a3|startswith: 'count='
+    - a2|startswith: 'count='
+  condition: all of selection_*
+falsepositives:
+  - Disk wiping, swap file creation and benchmark scripts. Those use large block counts and write to a device or swap path, so check the of= target.
+level: low
