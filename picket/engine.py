@@ -84,7 +84,8 @@ def _as_list(v: Any) -> list[Any]:
 
 def _string_matcher(value: SigmaString) -> Callable[[Any], bool]:
     if not value.contains_special():
-        plain = value.to_plain().lower()
+        # join the raw parts: to_plain() re-escapes literal * and ? characters
+        plain = "".join(p for p in value.s if isinstance(p, str)).lower()
         return lambda v: str(v).lower() == plain
     rx = re.compile(value.to_regex().regexp.to_plain(), re.IGNORECASE | re.DOTALL)
     return lambda v: rx.fullmatch(str(v)) is not None
