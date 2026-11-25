@@ -1,0 +1,74 @@
+# Public telemetry the replay harness downloads. Nothing here is committed to git:
+# `python -m picket fetch` pulls each file into .cache/ and normalises it.
+# Only log files are fetched. No malware samples are downloaded or executed.
+
+sources:
+  otrf:
+    name: OTRF Security-Datasets (Mordor)
+    url: https://github.com/OTRF/Security-Datasets
+    licence: MIT
+    base: https://raw.githubusercontent.com/OTRF/Security-Datasets/master/datasets/atomic/
+  evtx:
+    name: EVTX-ATTACK-SAMPLES
+    url: https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES
+    licence: GPL-3.0 (used unmodified as test input, not redistributed)
+    base: https://raw.githubusercontent.com/sbousseaden/EVTX-ATTACK-SAMPLES/master/
+  nextron:
+    name: Nextron evtx-baseline (clean Windows installs)
+    url: https://github.com/NextronSystems/evtx-baseline
+    licence: Apache-2.0
+    base: https://github.com/NextronSystems/evtx-baseline/releases/download/v0.8.5/
+
+datasets:
+  # ---- attack telemetry: OTRF ----
+  - {id: otrf_comsvcs_dump, source: otrf, kind: attack, path: windows/credential_access/host/psh_lsass_memory_dump_comsvcs.zip}
+  - {id: otrf_mimikatz_logonpasswords, source: otrf, kind: attack, path: windows/credential_access/host/empire_mimikatz_logonpasswords.zip}
+  - {id: otrf_ntdsutil, source: otrf, kind: attack, path: windows/credential_access/host/cmd_dumping_ntds_dit_file_ntdsutil.zip}
+  - {id: otrf_reg_dump_sam, source: otrf, kind: attack, path: windows/credential_access/host/empire_shell_reg_dump_sam.zip}
+  - {id: otrf_esentutl_sam, source: otrf, kind: attack, path: windows/credential_access/host/cmd_sam_copy_esentutl.zip}
+  - {id: otrf_dcsync_empire, source: otrf, kind: attack, path: windows/credential_access/host/empire_dcsync_dcerpc_drsuapi_DsGetNCChanges.zip}
+  - {id: otrf_dcsync_covenant, source: otrf, kind: attack, path: windows/credential_access/host/covenant_dcsync_dcerpc_drsuapi_DsGetNCChanges.zip}
+  - {id: otrf_mshta_vbs, source: otrf, kind: attack, path: windows/defense_evasion/host/cmd_mshta_vbscript_execute_psh.zip}
+  - {id: otrf_mshta_js, source: otrf, kind: attack, path: windows/defense_evasion/host/cmd_mshta_javascript_getobject_sct.zip}
+  - {id: otrf_regsvr32_sct, source: otrf, kind: attack, path: windows/defense_evasion/host/empire_launcher_sct_regsvr32.zip}
+  - {id: otrf_cmstp, source: otrf, kind: attack, path: windows/defense_evasion/host/psh_cmstp_execution_bypassuac.zip}
+  - {id: otrf_bitsadmin, source: otrf, kind: attack, path: windows/defense_evasion/host/cmd_bitsadmin_download_psh_script.zip}
+  - {id: otrf_netsh_fw, source: otrf, kind: attack, path: windows/defense_evasion/host/cmd_netsh_fw_mod_open_ports.zip}
+  - {id: otrf_cmdline_logging_off, source: otrf, kind: attack, path: windows/defense_evasion/host/reg_cmd_process_commandline_logging_disabled.zip}
+  - {id: otrf_eventlog_svc_disabled, source: otrf, kind: attack, path: windows/defense_evasion/host/cmd_disable_eventlog_service_startuptype_modification_via_registry.zip}
+  - {id: otrf_auditpol, source: otrf, kind: attack, path: windows/defense_evasion/host/auditpol_system_user_auditpolicy_modification.zip}
+  - {id: otrf_wdigest, source: otrf, kind: attack, path: windows/defense_evasion/host/empire_wdigest_downgrade.tar.gz}
+  - {id: otrf_runkey, source: otrf, kind: attack, path: windows/persistence/host/empire_persistence_registry_modification_run_keys_standard_user.zip}
+  - {id: otrf_schtasks, source: otrf, kind: attack, path: windows/persistence/host/empire_schtasks_creation_standard_user.zip}
+  - {id: otrf_wmi_subscription, source: otrf, kind: attack, path: windows/persistence/host/empire_wmi_local_event_subscriptions_elevated_user.zip}
+  - {id: otrf_fodhelper, source: otrf, kind: attack, path: windows/privilege_escalation/host/empire_uac_shellapi_fodhelper.zip}
+  - {id: otrf_svc_mod_fax, source: otrf, kind: attack, path: windows/privilege_escalation/host/cmd_service_mod_fax.zip}
+  - {id: otrf_psexec, source: otrf, kind: attack, path: windows/lateral_movement/host/empire_psexec_dcerpc_tcp_svcctl.zip}
+  - {id: otrf_wmi_exec, source: otrf, kind: attack, path: windows/lateral_movement/host/empire_wmi_dcerpc_wmi_IWbemServices_ExecMethod.zip}
+  - {id: otrf_seatbelt_group_user, source: otrf, kind: attack, path: windows/discovery/host/cmd_seatbelt_group_user.zip}
+  - {id: otrf_wmic_xsl, source: otrf, kind: attack, path: windows/defense_evasion/host/wmic_remote_xsl_jscript.zip}
+  - {id: otrf_msbuild, source: otrf, kind: attack, path: windows/lateral_movement/host/empire_msbuild_dcerpc_wmi_smb.zip}
+  - {id: otrf_linux_dd_padding, source: otrf, kind: attack, path: linux/defense_evasion/host/sh_binary_padding_dd.zip}
+  - {id: otrf_linux_arp_cache, source: otrf, kind: attack, path: linux/discovery/host/sh_arp_cache.zip}
+  - {id: otrf_aws_honeybucket, source: otrf, kind: attack, path: aws/discovery/aws_s3_honeybucketlogs.zip}
+  - {id: otrf_aws_ec2_proxy, source: otrf, kind: attack, path: aws/collection/ec2_proxy_s3_exfiltration.zip}
+
+  # ---- attack telemetry: EVTX-ATTACK-SAMPLES ----
+  - {id: evtx_comsvcs, source: evtx, kind: attack, path: "Credential Access/sysmon_10_1_memdump_comsvcs_minidump.evtx"}
+  - {id: evtx_mimikatz, source: evtx, kind: attack, path: "Credential Access/sysmon_10_lsass_mimikatz_sekurlsa_logonpasswords.evtx"}
+  - {id: evtx_dcsync, source: evtx, kind: attack, path: "Credential Access/CA_DCSync_4662.evtx"}
+  - {id: evtx_regsvr32_sct, source: evtx, kind: attack, path: "Execution/exec_sysmon_lobin_regsvr32_sct.evtx"}
+  - {id: evtx_cmstp, source: evtx, kind: attack, path: "Privilege Escalation/sysmon_1_13_11_cmstp_ini_uacbypass.evtx"}
+  - {id: evtx_wmic_xsl, source: evtx, kind: attack, path: "Execution/exec_wmic_xsl_internet_sysmon_3_1_11.evtx"}
+  - {id: evtx_wmi_subscription, source: evtx, kind: attack, path: "Persistence/wmighost_sysmon_20_21_1.evtx"}
+  - {id: evtx_remote_service, source: evtx, kind: attack, path: "Lateral Movement/LM_Remote_Service02_7045.evtx"}
+  - {id: evtx_mshta, source: evtx, kind: attack, path: "Execution/sysmon_mshta_sharpshooter_stageless_meterpreter.evtx"}
+  - {id: evtx_bits_persist, source: evtx, kind: attack, path: "Persistence/sysmon_1_persist_bitsjob_SetNotifyCmdLine.evtx"}
+  - {id: evtx_eventvwr_uac, source: evtx, kind: attack, path: "Privilege Escalation/Sysmon_13_1_UAC_Bypass_EventVwrBypass.evtx"}
+  - {id: evtx_sdclt_uac, source: evtx, kind: attack, path: "Privilege Escalation/Sysmon_13_1_UACBypass_SDCLTBypass.evtx"}
+  - {id: evtx_netsh_portproxy, source: evtx, kind: attack, path: "Defense Evasion/de_portforward_netsh_rdp_sysmon_13_1.evtx"}
+  - {id: evtx_hidden_runkey, source: evtx, kind: attack, path: "Persistence/evasion_persis_hidden_run_keyvalue_sysmon_13.evtx"}
+
+  # ---- benign baselines: clean Windows installs with normal user activity ----
+  - {id: baseline_win10, source: nextron, kind: benign, path: win10-client.tgz}
+  - {id: baseline_win2022_ad, source: nextron, kind: benign, path: win2022-ad.tgz}
