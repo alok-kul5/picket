@@ -1,0 +1,740 @@
+{
+  "name": "Picket detection coverage",
+  "versions": {
+    "attack": "20",
+    "navigator": "5.1.0",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "30 Sigma rules, replay-tested against public attack telemetry. Score = number of rules covering the technique.",
+  "sorting": 3,
+  "layout": {
+    "layout": "side",
+    "showID": true,
+    "showName": true,
+    "aggregateFunction": "max"
+  },
+  "hideDisabled": false,
+  "techniques": [
+    {
+      "techniqueID": "T1003.001",
+      "score": 3,
+      "color": "",
+      "comment": "LSASS Memory Dump via comsvcs.dll MiniDump (2/2 scenarios, 0 FP); Suspicious LSASS Process Access With Credential-Read Rights (2/2 scenarios, 2 FP); WDigest Cleartext Credential Caching Enabled (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_lsass_dump_comsvcs"
+        },
+        {
+          "name": "rule",
+          "value": "proc_access_lsass_credential_read"
+        },
+        {
+          "name": "rule",
+          "value": "reg_wdigest_logon_credential"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1003",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.002",
+      "score": 1,
+      "color": "",
+      "comment": "Registry Hive Copy for Offline Credential Extraction (2/2 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_sam_hive_copy"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1003",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.003",
+      "score": 1,
+      "color": "",
+      "comment": "NTDS.dit Copy via ntdsutil Install From Media (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_ntdsutil_ifm_dump"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1003",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.006",
+      "score": 1,
+      "color": "",
+      "comment": "DCSync Directory Replication Request by a User Account (3/3 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "sec_dcsync_replication_request"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1003",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1018",
+      "score": 1,
+      "color": "",
+      "comment": "ARP Cache or Neighbour Table Enumeration (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_arp_cache_discovery"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1021.002",
+      "score": 1,
+      "color": "",
+      "comment": "Service Installed With a Shell or Script Host Image Path (2/2 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "sys_service_install_suspicious_path"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1021",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027.001",
+      "score": 1,
+      "color": "",
+      "comment": "Binary Padding With dd From /dev/zero or /dev/random (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_dd_binary_padding"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1027",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1047",
+      "score": 1,
+      "color": "",
+      "comment": "WMI Provider Host Spawning a Shell or Script Host (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_wmiprvse_spawns_shell"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1053.005",
+      "score": 1,
+      "color": "",
+      "comment": "Scheduled Task Created to Run a Script Host or Staged Payload (1/1 scenarios, 1 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_schtasks_suspicious_create"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1053",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1069.001",
+      "score": 1,
+      "color": "",
+      "comment": "Local Account and Group Discovery (2/2 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_account_group_discovery"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1069",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1078.004",
+      "score": 1,
+      "color": "",
+      "comment": "EC2 Instance Role Credentials Used From a Workstation Client (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "aws_ec2_instance_credentials_used_off_host"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1078",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1087.001",
+      "score": 1,
+      "color": "",
+      "comment": "Local Account and Group Discovery (2/2 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_account_group_discovery"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1087",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.001",
+      "score": 1,
+      "color": "",
+      "comment": "Netsh PortProxy Port Forwarding Configured (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "reg_portproxy_forwarding"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1090",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1112",
+      "score": 1,
+      "color": "",
+      "comment": "WDigest Cleartext Credential Caching Enabled (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "reg_wdigest_logon_credential"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1127.001",
+      "score": 1,
+      "color": "",
+      "comment": "MSBuild Building From a Staging Folder or Spawning a Shell (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_msbuild_inline_task"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1127",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1197",
+      "score": 1,
+      "color": "",
+      "comment": "Bitsadmin Download or Job Notification Abuse (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_bitsadmin_transfer"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1218.003",
+      "score": 1,
+      "color": "",
+      "comment": "CMSTP Installing a Connection Profile Silently (2/2 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_cmstp_inf_execution"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1218",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1218.005",
+      "score": 1,
+      "color": "",
+      "comment": "Mshta Executing Inline Script or Remote HTA (3/3 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_mshta_script_execution"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1218",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1218.010",
+      "score": 1,
+      "color": "",
+      "comment": "Regsvr32 Loading a COM Scriptlet (Squiblydoo) (3/3 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_regsvr32_scriptlet"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1218",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1220",
+      "score": 1,
+      "color": "",
+      "comment": "WMIC Loading a Remote or Custom XSL Stylesheet (2/2 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_wmic_xsl_script"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1530",
+      "score": 1,
+      "color": "",
+      "comment": "Anonymous Principal Enumerating or Writing to an S3 Bucket (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "aws_s3_anonymous_bucket_access"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1543.003",
+      "score": 1,
+      "color": "",
+      "comment": "Service Binary Path Changed to a Script Host or Staged Payload (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_sc_service_binpath_change"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1543",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1546.003",
+      "score": 1,
+      "color": "",
+      "comment": "WMI Permanent Event Subscription Created (2/2 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "wmi_event_subscription"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1546",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1547.001",
+      "score": 1,
+      "color": "",
+      "comment": "Run Key Persistence Pointing at a Script Host or Staging Folder (2/2 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "reg_run_key_suspicious_value"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1547",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1548.002",
+      "score": 2,
+      "color": "",
+      "comment": "CMSTP Installing a Connection Profile Silently (2/2 scenarios, 0 FP); UAC Bypass via Per-User Shell Open Command Hijack (3/3 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_cmstp_inf_execution"
+        },
+        {
+          "name": "rule",
+          "value": "reg_uac_bypass_shell_open_hijack"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1548",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.005",
+      "score": 1,
+      "color": "",
+      "comment": "EC2 Instance Role Credentials Used From a Workstation Client (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "aws_ec2_instance_credentials_used_off_host"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1552",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1569.002",
+      "score": 1,
+      "color": "",
+      "comment": "Service Installed With a Shell or Script Host Image Path (2/2 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "sys_service_install_suspicious_path"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1569",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1619",
+      "score": 1,
+      "color": "",
+      "comment": "Anonymous Principal Enumerating or Writing to an S3 Bucket (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "aws_s3_anonymous_bucket_access"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1685.001",
+      "score": 3,
+      "color": "",
+      "comment": "Process Command-Line Auditing Disabled (1/1 scenarios, 0 FP); Windows Event Log Service or Autologger Disabled via Registry (1/1 scenarios, 0 FP); Audit Policy Success or Failure Auditing Removed (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "reg_cmdline_auditing_disabled"
+        },
+        {
+          "name": "rule",
+          "value": "reg_eventlog_service_disabled"
+        },
+        {
+          "name": "rule",
+          "value": "sec_audit_policy_disabled"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1685",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1685.002",
+      "score": 1,
+      "color": "",
+      "comment": "CloudTrail Logging Stopped, Deleted or Redirected (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "aws_cloudtrail_logging_tampering"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1685",
+      "showSubtechniques": true,
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1686.003",
+      "score": 1,
+      "color": "",
+      "comment": "Firewall Rule Added or Firewall Disabled via Netsh (1/1 scenarios, 0 FP)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "rule",
+          "value": "proc_netsh_firewall_allow"
+        },
+        {
+          "name": "replay",
+          "value": "pass"
+        }
+      ],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1686",
+      "showSubtechniques": true,
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fff1c1",
+      "#ffb020",
+      "#d9480f"
+    ],
+    "minValue": 0,
+    "maxValue": 3
+  },
+  "legendItems": [
+    {
+      "label": "covered by 1 rule",
+      "color": "#fff1c1"
+    },
+    {
+      "label": "3+ rules",
+      "color": "#d9480f"
+    }
+  ],
+  "showTacticRowBackground": true,
+  "tacticRowBackground": "#0b0f14",
+  "selectTechniquesAcrossTactics": true
+}
